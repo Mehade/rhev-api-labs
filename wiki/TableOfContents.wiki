@@ -1,7 +1,11 @@
   * [Main]
-  * Official Links
+  * Red Hat Official Links
     * [http://redhat.com/rhev RHEV]
     * [https://fedorahosted.org/rhevm-api/ RHEV REST API]
+  * Manuals
+    * [http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Virtualization_for_Desktops/index.html RHEV Manual]
+    * [http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Virtualization_for_Desktops/2.2/html/API_Guide/index.html Powershell API]
+    * [http://markmc.fedorapeople.org/rhevm-api/en-US/html/index.html REST API]
   * Related Links
     * [http://bitbucket.org/geertj/python-rhev RHEV REST in Python by Geert]
     * [http://rhev-wiki.org/ RHEV Wiki]
