@@ -7,5 +7,6 @@
     * [http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Virtualization_for_Desktops/2.2/html/API_Guide/index.html Powershell API]
     * [http://markmc.fedorapeople.org/rhevm-api/en-US/html/index.html REST API]
   * Related Links
+    * [http://www.spec.org/virt_sc2010/results/specvirt_sc2010_perf.html SPEC virt]
     * [http://bitbucket.org/geertj/python-rhev RHEV REST in Python by Geert]
     * [http://rhev-wiki.org/ RHEV Wiki]
