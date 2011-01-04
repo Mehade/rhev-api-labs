@@ -1,4 +1,7 @@
   * [Main]
-  * Related Links:
+  * Official Links:
     * [http://redhat.com/rhev RHEV]
-    * [https://fedorahosted.org/rhevm-api/ REST API]
+    * [https://fedorahosted.org/rhevm-api/ RHEV REST API]
+  * Related Links:
+    * [http://bitbucket.org/geertj/python-rhev RHEV REST in Python by Geert]
+    * [http://rhev-wiki.org/ RHEV Wiki]
