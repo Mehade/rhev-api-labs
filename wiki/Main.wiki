@@ -1,11 +1,10 @@
-
 == Introduction ==
 
 Red Hat Enterprise Virtualization (RHEV) is a complete virtualization platform including the KVM hypervisor and the RHEV Manager web console. Since RHEV2.3 there is an official REST API to manage and automate all aspects of your virtualization infrastructure.
 
 rhev-api-labs aims to provide sample code for different languages that can leverage the REST API features.
 
-If you wish to upload your own code snippet or be linked here, please contact [me]
+If you wish to upload your own code snippet or be linked here, please contact [tvvcox]
 
 == List of projects hosted here ==
 
