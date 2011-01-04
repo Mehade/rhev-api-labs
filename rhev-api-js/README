@@ -1,0 +1,16 @@
+Introduction:
+
+How to use the RHEV API with Javascript using jQuery $.ajax() to handle
+the REST request.
+
+This example only works in Firefox by disabling Same-Origin Policy (SPO).
+Find more info about SOP limitations and CORS at:
+
+https://fedorahosted.org/pipermail/rhevm-api/2011-January/000658.html
+
+Usage:
+
+- Download the file rhev-api-js-demo.htm
+- Open it locally with your browser: firefox rhev-api-js-demo.htm
+- Accept the security warning requesting SOP disabling for this page
+
