@@ -1,0 +1,27 @@
+Introduction:
+
+How to use the RHEV REST API with PHP.
+
+Usage:
+
+1. svn checkout http://rhev-api-labs.googlecode.com/svn/rhev-api-php
+2. $ cd rhev-api-php
+3. Edit config.php to your env
+3. Start playing with the test: $ php test_get.php
+
+Developer info:
+
+This package provides:
+
+REST.php: a generic REST client using curl with the following features:
+   * Full HTTP request debug (headers, responses, timmings, ...)
+   * Handles various formats: XML, JSON, YAML, TXT
+   
+REST_RHEV.php: high level REST usage without needing to manually handle
+   HTTP requests. See discussion here:
+   
+   https://fedorahosted.org/pipermail/rhevm-api/2010-December/000651.html
+
+test_get.php: sample REST_RHEV usage
+test_json_tracerse_rest.php: runs all your collections and resources
+   and creates a report with the results
