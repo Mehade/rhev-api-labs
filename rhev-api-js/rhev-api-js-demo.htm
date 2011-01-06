@@ -43,14 +43,15 @@ rhev = {
             dataType: 'json',
             success: callback,
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('RHEV Error: '+textStatus+'-'+errorThrown);
+                alert('RHEV Error: '+textStatus+'-'+errorThrown);
             }
         });
     }
 }
 
-
 function buildTable(data) {
+    // running Chrome with --disable-web-security make the request
+    // go through but for some reason we get empty data here, looks buggy
     if (!data) {
         alert("Request succesful but no data, running Chrome?");
         return false;
@@ -64,12 +65,12 @@ function buildTable(data) {
 }
 
 $(document).ready(function() {
-
+    // pre-fill form values
     $("#url").val(url);
     $("#username").val(user);
     $("#password").val(pass);
     $("#entry").val(entry);
-
+    // add a click event to the <button> Go!
     $("button").click(function() {
         url = $("#url").val();
         user = $("#username").val();
@@ -95,14 +96,14 @@ $(document).ready(function() {
         <td><input type="password" id="password" size=10></td>
         <td><input type="text" id="url" size=40></td>
         <td><input type="text" id="entry">
-        <button>Go!</button>
+            <button>Go!</button>
         </td>
     </tr>
 </table>
 <hr>
 <div id="foo">
-<table border=1>
-</table>
+    <table border=1>
+    </table>
 </div>
 
 </body>
