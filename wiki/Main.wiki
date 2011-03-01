@@ -20,6 +20,10 @@ If you wish to upload your own code snippet or be linked here, please contact tv
 
   * PHP API to RHEV REST Json API: SVN / [https://code.google.com/p/rhev-api-labs/source/browse/rhev-api-php rhev-api-php]
 
+=== Bash ===
+
+  * Bash example using curl and xpath: SVN / [https://code.google.com/p/rhev-api-labs/source/browse/bash/vm_control.sh vm_control.sh]
+
 === Python ===
 
   * Python bindings based on Geert works, were integrated into the main REST API source code. Setup instructions:
