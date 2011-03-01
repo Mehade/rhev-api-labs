@@ -10,7 +10,7 @@ If you wish to upload your own code snippet or be linked here, please contact tv
 
 === All ===
 
-  * Step by step detailed REST API installation instructions on RHEV 2.2 by James Rankin: SVN / [http://rhev-api-labs.googlecode.com/svn/rhev-api-docs/RHEV_2.2_REST_API_Installation.pdf RHEV_2.2_REST_API_Installation.pdf]
+  * Step by step detailed REST API installation instructions on RHEV 2.2 by James Rankin: [http://markmc.fedorapeople.org/rhevm-api-installation/en-US/html-single/]
 
 === Javascript ===
 
