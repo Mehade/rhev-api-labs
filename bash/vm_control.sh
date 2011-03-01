@@ -1,8 +1,9 @@
 #!/bin/bash
 ######## config #############
 # NOTE: xpath from the package perl-XML-XPath is REQUIRED!!
-rhev_api_url="https://rhevm.selab.mad.redhat.com:8443/rhevm-api-powershell"
-rhev_api_auth="rhevadmin@selab.mad.redhat.com:redhat123."
+#       curl comandline is also required
+rhev_api_url="https://rhevm.example.com:8443/rhevm-api-powershell"
+rhev_api_auth="user@domain:password"
 ######## end config #########
 
 rest_call() {
