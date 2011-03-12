@@ -23,6 +23,7 @@ $ export RHEV_password=..
 
 Tested with:
 RHEV 2.2
+RHEV REST API milestone 0.8.1 (required) 
 spice-client-0.6.3 from RHEL6
 
 Note: this script is currently incompatible with spice-0.5 from RHEL5, although it's easy to adapt
