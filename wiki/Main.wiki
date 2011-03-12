@@ -27,9 +27,20 @@ If you wish to upload your own code snippet or be linked here, please contact tv
 === Python ===
 
   * Python bindings based on Geert works, were integrated into the main REST API source code. Setup instructions:
-{{{
- $ python setup.py build
- $ sudo python setup.py install
 
-And then have a look at the examples/ directory (and the test suite for more examples).
+Download and install PyXB:
+{{{
+ Download PyXB from http://sourceforge.net/projects/pyxb/files/pyxb/
+ $ tar xvfz PyXB-full-1.1.2.tar.gz
+ $ cd PyXB-1.1.2
+ $ python setup.py bdist_rpm
+ (as root)
+ # rpm -ivh dist/PyXB-1.1.2-1.noarch.rpm
 }}}
+
+Download and install python-rhev:
+{{{
+ $ easy_install python-rhev
+}}}
+
+See examples at [http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=examples/python;h=8445d4ce1f51236c536f14c1b5abdbb572d8a86b;hb=HEAD <git>/examples/python]
