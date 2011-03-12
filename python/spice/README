@@ -1,0 +1,29 @@
+Introduction:
+
+This script opens an SPICE connection to a VM from cmdline. It does the following actions:
+
+- Searches the VM ID from a given VM Name
+- Extracts display info params: host, port and calculates the secure port
+- Creates a ticket for the VM
+- Downloads the CA certificate from RHEV-M using wget
+- Runs the command 'spicec' with the proper params
+
+Usage:
+
+- Install the python-rhev package, instructions at:
+https://code.google.com/p/rhev-api-labs/wiki/Main#Python
+
+- Run the command:
+$ ./spice.py --url=https://rhevm.example.com:8443/rhevm-api-powershell --username=<rhevadmin>@<domain> --password=<mypass> <vmname>
+
+It's also possible to pass the following params as env variables with:
+$ export RHEV_url="https://rhevm.example.com:8443/rhevm-api-powershell"
+$ export RHEV_username=..
+$ export RHEV_password=..
+
+Tested with:
+RHEV 2.2
+spice-client-0.6.3 from RHEL6
+
+Note: this script is currently incompatible with spice-0.5 from RHEL5, although it's easy to adapt
+
