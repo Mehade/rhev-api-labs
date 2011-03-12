@@ -43,4 +43,4 @@ Download and install python-rhev:
  $ easy_install python-rhev
 }}}
 
-See examples at [http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=examples/python;h=8445d4ce1f51236c536f14c1b5abdbb572d8a86b;hb=HEAD <git>/examples/python]
+See examples at [http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=examples/python;h=8445d4ce1f51236c536f14c1b5abdbb572d8a86b;hb=HEAD <git>/examples/python] and [http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=python/lib/rhev/test;h=89c691283bdca15296fb2d195886a2a4e6136acc;hb=HEAD <git>/python/lib/rhev/test/]
