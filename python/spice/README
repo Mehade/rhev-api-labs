@@ -17,9 +17,9 @@ https://code.google.com/p/rhev-api-labs/wiki/Main#Python
 $ ./spice.py --url=https://rhevm.example.com:8443/rhevm-api-powershell --username=<rhevadmin>@<domain> --password=<mypass> <vmname>
 
 It's also possible to pass the following params as env variables with:
-$ export RHEV_url="https://rhevm.example.com:8443/rhevm-api-powershell"
-$ export RHEV_username=..
-$ export RHEV_password=..
+$ export RHEV_URL="https://rhevm.example.com:8443/rhevm-api-powershell"
+$ export RHEV_USERNAME=..
+$ export RHEV_PASSWORD=..
 
 Tested with:
 RHEV 2.2
