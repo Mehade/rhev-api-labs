@@ -11,7 +11,7 @@ rest_call() {
 	path=$2
 	body=$3
 	url="${rhev_api_url}${path}"
-	curl --insecure --request $method --data "$body" --user $rhev_api_auth --basic --url $url --silent --show-error --header "Accept: application/xml" --header "Content-type: application/xml"
+	curl --fail --insecure --request $method --data "$body" --user $rhev_api_auth --basic --url $url --silent --show-error --header "Accept: application/xml" --header "Content-type: application/xml"
 }
 
 if [ -z "$2" ]; then
