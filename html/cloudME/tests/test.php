@@ -1,0 +1,5 @@
+<?php
+$f='{"images":[{"state":"OK","description":"Blank template","architecture":"x86_64","href":"http://localhost:3001/api/images/00000000-0000-0000-0000-000000000000","name":"Blank","owner_id":"rhevadmin@selab.mad.redhat.com","id":"00000000-0000-0000-0000-000000000000"},{"state":"OK","description":null,"architecture":"x86_64","href":"http://localhost:3001/api/images/8ec69b67-6da7-451d-91f2-c206b25c75dd","name":"jboss-eap-tpl","owner_id":"rhevadmin@selab.mad.redhat.com","id":"8ec69b67-6da7-451d-91f2-c206b25c75dd"},{"state":"OK","description":null,"architecture":"x86_64","href":"http://localhost:3001/api/images/b77b6ab8-364f-49fd-85f0-e71388225428","name":"rhel-test-tpl","owner_id":"rhevadmin@selab.mad.redhat.com","id":"b77b6ab8-364f-49fd-85f0-e71388225428"},{"state":"OK","description":null,"architecture":"x86_64","href":"http://localhost:3001/api/images/8f834950-aaae-4f51-8058-943b178f4301","name":"rhel5-cli-tpl","owner_id":"rhevadmin@selab.mad.redhat.com","id":"8f834950-aaae-4f51-8058-943b178f4301"}]}';
+
+print_r(json_decode($f));
+?>
