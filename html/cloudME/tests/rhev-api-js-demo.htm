@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>RHEV Rest in Javascript Demo</title>
+<script type="text/javascript"
+	src="../jqtouch/jquery.1.3.2.min.js"></script>
+<script type="text/javascript">
+
+/*
+ * Author: Tomas Von Veschler <tvvcox>
+ * Url: https://code.google.com/p/rhev-api-labs/
+ */
+
+// Pre-fill form values here for more comfortable testing
+url = 'http://localhost:3001';
+entry = '/api'; // NOTICE: no trailing slash
+user = 'rhevadmin@selab.mad.redhat.com'; // Format: user@dmain.com
+pass = 'redhat123.';
+
+    
+rhev = {
+    _url: null,
+    _username: null,
+    _password: null,
+    init: function(url, user, pass) {
+        this._url = url;
+        this._user = user;
+        this._pass = pass;
+    },
+    call: function(callback, method, path, body) {
+       
+        $.ajax({
+            type: method,
+            url: this._url + path + "?format=json",
+            username: this._user,
+            password: this._pass,
+            dataType: 'json',
+            success: callback,
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('cloudME Error: '+textStatus+'-'+errorThrown+'-'+XMLHttpRequest);
+            }
+        });
+    }
+}
+
+function buildTable(data) {
+    // running Chrome with --disable-web-security make the request
+    // go through but for some reason we get empty data here, looks buggy
+    if (!data) {
+        alert("Request succesful but no data, running Chrome?");
+        return false;
+    }
+    table = $("#foo table");
+    table.toggle(false);
+    $.each(data.images, function(i, image) {
+        table.append("<tr><td>"+image.id+"</td>"+"<td>"+image.name+"</td></tr>");
+    });
+    table.fadeIn('slow');
+}
+
+$(document).ready(function() {
+    // pre-fill form values
+    $("#url").val(url);
+    $("#username").val(user);
+    $("#password").val(pass);
+    $("#entry").val(entry);
+    // add a click event to the <button> Go!
+    $("button").click(function() {
+        url = $("#url").val();
+        user = $("#username").val();
+        pass = $("#password").val();
+        entry = $("#entry").val();
+        rhev.init(url, user, pass);
+        rhev.call(buildTable, "GET", entry + "/images");
+    });
+});
+
+</script>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Username</td>
+        <td>Password</td>
+        <td>Url</td>
+        <td>Entry</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="username" size=20></td>
+        <td><input type="password" id="password" size=10></td>
+        <td><input type="text" id="url" size=40></td>
+        <td><input type="text" id="entry">
+            <button>Go!</button>
+        </td>
+    </tr>
+</table>
+<hr>
+<div id="foo">
+    <table border=1>
+    </table>
+</div>
+
+</body>
+</html>

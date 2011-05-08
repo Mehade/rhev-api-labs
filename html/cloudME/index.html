@@ -1,0 +1,432 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>&delta; ME</title>
+<style type="text/css" media="screen">@import "./jqtouch/jqtouch.css";</style>
+<style type="text/css" media="screen">@import "./themes/jqt/theme.css";</style>
+<style type="text/css">
+ul li small.down {
+    font-size: 17px;
+    line-height: 13px;
+    font-weight: bold;
+    background: red;
+    color: #fff;
+    -webkit-border-radius: 11px;
+    padding: 4px 10px 5px 10px;
+    display: block;
+    width: auto;
+    margin-top: -22px;
+    -webkit-box-shadow: rgba(255,255,255,.1) 0 1px 0;
+}
+ul li small.up {
+    font-size: 17px;
+    line-height: 13px;
+    font-weight: bold;
+    background: green;
+    color: #fff;
+    -webkit-border-radius: 11px;
+    padding: 4px 10px 5px 10px;
+    display: block;
+    width: auto;
+    margin-top: -22px;
+    -webkit-box-shadow: rgba(255,255,255,.1) 0 1px 0;
+}
+ul li.arrow small.down {
+    margin-right: 15px;
+}
+ul li.arrow small.up {
+    margin-right: 15px;
+}
+</style>
+
+<script src="./jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
+<script src="./jqtouch/jquery.blockUI.js" type="application/x-javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+
+var isIphone = navigator.userAgent.indexOf("iPhone") != -1 ;
+var isIpod   = navigator.userAgent.indexOf("iPod") != -1 ;
+var isIpad   = navigator.userAgent.indexOf("iPad") != -1 ;
+var isIos    = isIphone || isIpod || isIpad ; 
+
+var jQT = new $.jQTouch({
+    icon: 'redhat-sphere.jpg',
+    addGlossToIcon: false,
+    startupScreen: 'jqt_startup.png',
+    statusBar: 'black',
+    useAnimations: isIos ? true : false, // jqtouch animations on android fails
+    preloadImages: [
+        './themes/jqt/img/back_button.png',
+        './themes/jqt/img/back_button_clicked.png',
+        './themes/jqt/img/button_clicked.png',
+        './themes/jqt/img/grayButton.png',
+        './themes/jqt/img/whiteButton.png',
+        './themes/jqt/img/loading.gif'
+        ]
+})
+
+function Deltacloud() {
+    this._data = {
+        images: [],
+        instances: [],
+        realms: []
+    }
+    this.init = function(url, user, pass) {
+        this._url = $('#deltacloud-url').val()
+        this._user = $('#provider-user').val()
+        this._pass = $('#provider-pass').val()
+        $(document).ajaxStop($.unblockUI)
+    }
+    this.call = function(method, path, body, callback) {
+        $.blockUI({ 
+            message: '<small><img src="./themes/jqt/img/loading.gif" /> Loading...</small>',
+            theme:     true
+        })
+        url = 'http://' + document.domain + '/api' + path
+        // XXX Problem is:
+        // 1) POST /instances?format=json : gives deltacloud error missing template
+        // 2) POST /instances : gives a json parse error
+        // workaround: custom function to use (2) and discard the html response
+        if (method == 'GET') {
+            url = url + '?format=json'
+            data_type = 'json'
+        } else {
+            data_type = 'html'
+        }
+        console.log("remote call in progress: " + url)
+        
+        $.ajax({
+            type: method,
+            url: url,
+            //username: this._user, // this causes major bugs and headaches on
+            //password: this._pass, // mobile browsers, let the browser ask for credentials
+            data: body,
+            dataType: data_type,
+            success: callback,
+            cache: false,
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest)
+                console.log(textStatus)
+                console.log(errorThrown)
+                alert('Error: Status: '    + XMLHttpRequest.status + '\n' +
+                             'Readystate:' + XMLHttpRequest.readyState + '\n' + 
+                             'Statustext:' + XMLHttpRequest.statusText)
+                return false
+            }
+        })
+    }
+    this.set = function(label, data) {
+        this._data[label] = data
+        localStorage.setItem('deltacloud-data', JSON.stringify(this._data))
+    }
+    this.get = function(label, id) {
+        //console.log("getting " + label + ' // id: ' + id)
+        if (this._data[label].length < 1) {
+            data = localStorage.getItem('deltacloud-data')
+            if (data) {
+                this._data = JSON.parse(data)
+            }
+        }
+        if (id != undefined) {
+            objects = this._data[label]
+            object = null
+            for (i in objects) {
+                if (id == objects[i].id) {
+                    object = objects[i]; break;
+                }
+            }
+            return object
+        }
+        return this._data[label]
+    }
+}
+
+var dcloud = new Deltacloud()
+
+function Template() {
+
+    // XXX move to real state handling if this list grows
+    this.realm_id = false // track currently selected realm
+    this.vm_id = false    // track currently selected vm (instance)
+
+    this.init = function() {
+        this.realm_tpl = $('#realms ul')[0].innerHTML
+        this.vm_tpl = $('#vms ul')[0].innerHTML
+        //console.log(this.realm_tpl)
+    }
+    
+    this.drawRealms = function() {
+        this.realm_id = false
+        this.vm_id = false
+        html = ''
+        realms = []
+        vms = dcloud.get('instances')
+        for (i in vms) {
+            id = vms[i].realm_id
+            realms[id] = realms[id] == undefined ? 1 : realms[id] + 1
+        }
+        $.each(dcloud.get('realms'), function(i, data) {
+            row = tpl.realm_tpl
+            num_vms = realms[data.id] == undefined ? 0 : realms[data.id]
+            html += row.replace('%REALM_ID%', data.id)
+                       .replace('%REALM_NAME%', data.name)
+                       .replace('%REALM_VMCOUNT%', num_vms)
+        })
+        if (html == '') {
+            html = '<center>Welcome! Please start with the Settings button</center>'
+        }
+        $('#realms ul').html(html)
+    }
+
+    this.drawVMs = function() {
+        this.vm_id = false
+        html = ''
+        $.each(dcloud.get('instances'), function(i, data) {
+            if (data.realm_id == tpl.realm_id) {
+                row = tpl.vm_tpl
+                state_css = data.state == 'STOPPED' ? 'down' : 'up'
+                html += row.replace('%VM_ID%', data.id)
+                           .replace('%VM_NAME%', data.name)
+                           .replace('%VM_STATE%', state_css)
+            }
+        })
+        //console.log(html)
+        $('#vms ul').html(html)
+    }
+    // Handles both edit and new vm (the latter recognized by tpl.vm_id == false)
+    this.drawVM = function() {
+        html = ''
+        vm = dcloud.get('instances', tpl.vm_id)
+        // templates
+        $('#vm-edit-image').html('')
+        $.each(dcloud.get('images'), function(i, data) {
+            option = document.createElement('option')
+            option.value = data.id
+            option.text = data.name
+            option.selected = vm && (vm.image_id == data.id) ? true : false
+            $('#vm-edit-image').append(option)
+        })
+        // profiles
+        $('#vm-edit-hw-profile').html('')
+        $.each(dcloud.get('hw_profiles'), function(i, data) {
+            option = document.createElement('option')
+            option.value = data.id
+            option.text = data.id
+            option.selected = vm && (vm.instance_profile.id == data.id) ? true : false
+            $('#vm-edit-hw-profile').append(option)
+        })
+        
+        if (vm) { // edit VM
+            $('#vm-edit-name').val(vm.name)
+            if (vm.state != 'STOPPED') {
+                $('#vm-edit-state').attr('checked', true)
+            } else {
+                $('#vm-edit-state').attr('checked', false)
+            }
+            // XXX if vm was created outside, it's possible we have a value
+            // not in the select. Solution could be to dynamically add an 
+            // <option> with the custom value
+            $("#vm-edit-cpu option[value="+vm.instance_profile.cpu+"]").attr("selected", true)
+            $("#vm-edit-memory option[value="+vm.instance_profile.memory+"]").attr("selected", true)
+            $("#vm-edit-storage option[value="+vm.instance_profile.storage+"]").attr("selected", true)
+        } else { // new VM
+            $('#vm-edit form').get(0).reset()  // load form defaults
+        }
+    }
+}
+
+var tpl = new Template()
+
+$(function() {
+    
+    $('#save-settings').click(function() {
+        console.log($('#deltacloud-url').val())
+        localStorage.setItem('deltacloud-url', $('#deltacloud-url').val())
+        localStorage.setItem('provider-user', $('#provider-user').val())
+        localStorage.setItem('provider-pass', $('#provider-pass').val())
+        dcloud.init()
+        jQT.goBack()
+        //jQT.goTo('#vms', 'flip');
+        return false
+    })
+    
+    $('#settings .whiteButton').click(function() {
+        console.log("syncing....")
+        dcloud.call('GET', '/hardware_profiles', null, function(data) {
+            dcloud.set('hw_profiles', data.hardware_profiles)
+        })
+        dcloud.call('GET', '/realms', null, function(data) {
+            dcloud.set('realms', data.realms)
+        })
+        dcloud.call('GET', '/images', null, function(data) {
+            dcloud.set('images', data.images)
+        })
+        dcloud.call('GET', '/instances', null, function(data) {
+            dcloud.set('instances', data.instances)
+            console.log(dcloud._data)
+            alert("Sync successful")
+        })
+        return false
+    })
+
+    $('#save-vm').click(function() {
+        vm = dcloud.get('instances', tpl.vm_id)
+        if (vm) { // edit vm
+            alert("To be implemented....")
+        } else {  // new vm
+            console.log("new vm creation in progress")
+            // XXX i'm unable to post json strings, investigate
+            //vm = {}
+            //vm.name     = $('#vm-edit-name').val()
+            //vm.image_id = $('#vm-edit-image').val()
+            //vm.instance_profile = {}
+            //vm.instance_profile.id      = $('#vm-edit-hw-profile').val()
+            //vm.instance_profile.cpu     = $('#vm-edit-cpu').val()
+            //vm.instance_profile.memory  = $('#vm-edit-memory').val()
+            //vm.instance_profile.storage = $('#vm-edit-storage').val()
+            //body = JSON.stringify(vm)
+            //console.log(vm)
+            //dcloud.call('POST', '/instances', body, function(data) {
+            //    console.log("created successfuly")
+            //    console.log(data)
+            //})
+            
+            params = {
+                name:        $('#vm-edit-name').val(),
+                image_id:    $('#vm-edit-image').val(),
+                realm_id:    tpl.realm_id,
+                hwp_id:      $('#vm-edit-hw-profile').val(),
+                hwp_memory:  $('#vm-edit-memory').val(),
+                hwp_storage: $('#vm-edit-storage').val(),
+                hwp_cpu:     $('#vm-edit-cpu').val()
+            }
+            dcloud.call('POST', '/instances', params, function(data) {
+                alert("VM successfully created")
+                // XXX implement VM create + start here
+                // $('#vm-edit-state').attr('checked')
+                jQT.goBack()
+            })
+        }
+        return false
+    })
+    
+    // "hashchange" is the event when the anchor of a page changes
+    // so every time the user navigates to a different page
+    // it's captured here and allows to trigger the dynamic page creation
+    // http://www.ryanday.net/?p=253
+    $(window).bind('hashchange', function() {
+        //console.log("hash changing to: " + location.hash)
+        switch(location.hash) {
+            case '#realms':  tpl.drawRealms(); break;
+            case '#vms':     tpl.drawVMs();    break;
+            case '#vm-edit': tpl.drawVM();     break;
+        }
+    })
+})
+
+$(document).ready(function() {
+    $('#deltacloud-url').val(localStorage.getItem('deltacloud-url'))
+    $('#provider-user').val(localStorage.getItem('provider-user'))
+    $('#provider-pass').val(localStorage.getItem('provider-pass'))
+    if ($('#deltacloud-url').val().length < 1) {
+        console.log("guess deltacloud url")
+        $('#deltacloud-url').val(location.protocol + '//' + location.host + '/api')
+    }
+    dcloud.init()
+    dcloud.get('images')
+    console.log(dcloud._data)
+    tpl.init()
+    tpl.drawRealms()
+})
+
+</script>
+</head>
+<body>
+
+<div id="realms" class="current">
+    <div class="toolbar">
+        <h1>Datacenters</h1>
+        <a href="#settings" class="button slideup">Settings</a>
+    </div>
+    <ul class="rounded">
+        <li onclick="tpl.realm_id=%REALM_ID%" class="arrow"><a href="#vms">%REALM_NAME%</a> <small class="counter">%REALM_VMCOUNT%</small></li>
+    </ul>
+</div>
+
+<div id="settings">
+    <div class="toolbar">
+        <h1>&delta; ME Settings</h1>
+        <a href="#" class="back">Back</a>
+        <a href="#" id="save-settings" class="button slideup">Save</a>
+    </div>
+    <ul class="edit rounded">
+        <li>Deltacloud Url: <input type="text" id="deltacloud-url" placeholder="http://example.com:3001/api"/></li>
+        <li>Username: <input type="text" id="provider-user" placeholder="user@domain" /></li>
+        <li>Password: <input type="password" id="provider-pass" placeholder="password" /></li>
+    </ul>
+    <a href="#" class="whiteButton" style="margin: 10px">Sync now</a>
+</div>    
+
+<div id="vms">
+    <div class="toolbar">
+        <h1>VMs</h1>
+        <a href="#" class="back">Back</a>
+        <a href="#vm-edit" class="button slideup">New</a>
+    </div>
+    <ul class="rounded">
+        <li onclick="tpl.vm_id='%VM_ID%'" class="arrow"><a href="#vm-edit">%VM_NAME%</a> <small class="%VM_STATE%">&nbsp;</small></li>
+    </ul>
+</div>
+
+<div id="vm-edit">
+    <form>
+    <div class="toolbar">
+        <h1>VM Details</h1>
+        <a href="#" class="back">Back</a>
+        <a href="#" id="save-vm" class="button slideup">Save</a>
+    </div>
+    <ul class="edit rounded">
+        <li>Name: <input id="vm-edit-name" type="text" placeholder="tap here to set the VM name"/></li>
+        <li>Status: <span class="toggle"><input id="vm-edit-state" type="checkbox" /></span></li>
+        <li>Template:
+            <select id="vm-edit-image">
+                <!-- <option value="%IMAGE_ID%" %IMAGE_SELECTED%>%IMAGE_NAME%</option>  -->
+            </select>
+        </li>
+        <li>vCPUs:
+            <select id="vm-edit-cpu">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="8">8</option>
+                <option value="16">16</option>
+            </select>
+        </li>
+        <li>Memory:
+            <select id="vm-edit-memory">
+                <option value="512">512 Mb</option>
+                <option value="1024" selected>1 Gb</option>
+                <option value="2048">2 Gb</option>
+                <option value="4096">4 Gb</option>
+                <option value="8192">8 Gb</option>
+            </select>
+        </li>
+        <li>Disk size:
+            <select id="vm-edit-storage">
+                <option value="1">1 Gb</option>
+                <option value="2">2 Gb</option>
+                <option value="4" selected>4 Gb</option>
+                <option value="8">8 Gb</option>
+                <option value="16">16 Gb</option>
+            </select>
+        </li>
+        <li>Profile:
+            <select id="vm-edit-hw-profile">
+            </select>
+        </li>
+    </ul>
+    </form>
+</div>
+</body>
+</html>
