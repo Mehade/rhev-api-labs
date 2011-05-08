@@ -14,3 +14,6 @@ $ $ ln -s `pwd`/cloudME server/public/
 Point browser to:
 
 http://192.168.0.193/cloudME/index.html
+
+When browser asks for credentials use your RHEV credentials, ie:
+username: rhevadmin@selab.mad.redhat.com
