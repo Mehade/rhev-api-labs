@@ -9,8 +9,8 @@ rhev-api-labs aims to provide sample code for different languages that can lever
 If you wish to upload your own code snippet or be linked here, please contact tvvcox gmail
 
 === All ===
-
-  * Step by step detailed REST API installation instructions on RHEV 2.2 by James Rankin: [http://markmc.fedorapeople.org/rhevm-api-installation/en-US/html-single/]
+  * RHEV3.0: The REST API is included by default since RHEV 3.0. The API manual is available here: http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Virtualization/3.0/html/REST_API_Guide/index.html
+  * RHEV2.2: Step by step detailed REST API installation instructions on RHEV 2.2 by James Rankin: [http://markmc.fedorapeople.org/rhevm-api-installation/en-US/html-single/]
 
 === Javascript ===
 
