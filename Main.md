@@ -1,0 +1,35 @@
+## Introduction ##
+
+Red Hat Enterprise Virtualization (RHEV) is a complete virtualization platform including the KVM hypervisor and the RHEV Manager web console. Since RHEV2.2 there is a REST API to manage and automate all aspects of your virtualization infrastructure.
+
+rhev-api-labs aims to provide sample code for different languages that can leverage the REST API features.
+
+If you wish to upload your own code snippet or be linked here, please contact tvvcox gmail
+
+### All ###
+  * RHEV3.0: The REST API is included by default since RHEV 3.0. The API manual is available here: http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Virtualization/3.0/html/REST_API_Guide/index.html
+  * RHEV2.2: Step by step detailed REST API installation instructions on RHEV 2.2 by James Rankin: http://markmc.fedorapeople.org/rhevm-api-installation/en-US/html-single/
+
+### Javascript ###
+
+  * How to use the API with Javascript and jQuery: SVN / [rhev-api-js](https://code.google.com/p/rhev-api-labs/source/browse/rhev-api-js)
+
+### PHP ###
+
+  * PHP API to RHEV REST Json API: SVN / [rhev-api-php](https://code.google.com/p/rhev-api-labs/source/browse/rhev-api-php)
+
+### Bash ###
+
+  * Bash example using curl and xpath: SVN / [vm\_control.sh](https://code.google.com/p/rhev-api-labs/source/browse/bash/vm_control.sh)
+
+### Python ###
+
+  * Python bindings based on Geert works, were integrated into the main REST API source code. Code is available in EPEL (http://fedoraproject.org/wiki/EPEL). Add the EPEL repo and install the package plus dependencies with:
+
+```
+yum --enablerepo=epel-testing install rhevsh 
+```
+
+See examples at [&lt;git&gt;/examples/python](http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=examples/python;h=8445d4ce1f51236c536f14c1b5abdbb572d8a86b;hb=HEAD) and [&lt;git&gt;/python/lib/rhev/test/](http://git.fedorahosted.org/git/?p=rhevm-api.git;a=tree;f=python/lib/rhev/test;h=89c691283bdca15296fb2d195886a2a4e6136acc;hb=HEAD)
+
+  * SPICE command line script: SVN / python / [spice](https://code.google.com/p/rhev-api-labs/source/browse/python/spice/)
